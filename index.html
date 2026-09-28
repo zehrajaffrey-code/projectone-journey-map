@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project ONE · Paramount Ad Sales Journey Map</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#000A3B',
+                        'navy-light': '#F0F4FF',
+                        'pain-red': '#DC2626',
+                        'border-gray': '#E5E7EB',
+                        'subtle-gray': '#F9FAFB',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Editorial, anti-AI styles: Sharp corners, flat grids, crisp borders */
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+        }
+
+        /* Custom subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 2px;
+        }
+
+        .table-grid {
+            border-collapse: collapse;
+        }
+
+        .border-grid {
+            border: 1px solid #E5E7EB;
+        }
+
+        /* Column Selection Highlight State */
+        .col-selected {
+            position: relative;
+            z-index: 10;
+        }
+        .col-dimmed {
+            opacity: 0.25;
+            filter: grayscale(80%);
+        }
+
+        .transition-editorial {
+            transition: all 0.15s ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-900 antialiased min-h-screen p-4 md:p-8">
+
+    <!-- MAIN EDITORIAL CONTAINER FRAME -->
+    <div id="main-container" class="max-w-[1800px] mx-auto bg-white border border-slate-200 rounded-md p-6 md:p-10 shadow-sm">
+
+        <!-- HEADER SECTION (Editorial & Documented) -->
+        <header class="pb-8 mb-6 border-b border-slate-200">
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-[11px] font-mono font-semibold tracking-wider text-navy bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-sm">
+                            DOCUMENT // PROJECT ONE
+                        </span>
+                        <span class="text-xs text-slate-500 font-mono">PARAMOUNT AD SALES BLUEPRINT</span>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+                        From new client to bookable advertiser
+                    </h1>
+                    <p class="text-slate-600 text-sm md:text-base mt-1 font-normal">
+                        End-to-end journey mapping across 6 core functional workflows.
+                    </p>
+                </div>
+
+                <!-- TAGS (Clean Editorial Badges) -->
+                <div class="flex flex-wrap gap-2 max-w-xl">
+                    <span class="text-xs font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-sm border border-slate-200">
+                        PRD + data model review
+                    </span>
+                    <span class="text-xs font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-sm border border-slate-200">
+                        Stakeholder working sessions
+                    </span>
+                    <span class="text-xs font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-sm border border-slate-200">
+                        Legacy spreadsheet audit
+                    </span>
+                    <span class="text-xs font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-sm border border-slate-200">
+                        Cross-system workflow mapping
+                    </span>
+                </div>
+            </div>
+
+            <!-- CONTROLS & FILTERS BAR -->
+            <div class="flex flex-wrap items-center justify-between gap-4 mt-8 pt-4 border-t border-slate-100 text-xs font-medium">
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400 font-mono text-[11px] uppercase tracking-wider mr-1">View Filter:</span>
+                    <button onclick="filterRows('all')" id="btn-all" class="filter-btn active bg-slate-900 text-white px-3 py-1 rounded-sm border border-slate-900 transition-editorial">
+                        All Rows
+                    </button>
+                    <button onclick="filterRows('pain')" id="btn-pain" class="filter-btn bg-white text-slate-700 hover:bg-slate-100 px-3 py-1 rounded-sm border border-slate-200 transition-editorial">
+                        Pain Points
+                    </button>
+                    <button onclick="filterRows('decision')" id="btn-decision" class="filter-btn bg-white text-slate-700 hover:bg-slate-100 px-3 py-1 rounded-sm border border-slate-200 transition-editorial">
+                        Design Decisions
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-6 text-slate-600">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" id="chk-pain" onchange="togglePainEmphasis()" class="rounded-none border-slate-300 text-navy focus:ring-0">
+                        <span class="font-mono text-xs">Emphasize Pain Points</span>
+                    </label>
+
+                    <button onclick="resetSelection()" class="text-slate-500 hover:text-navy underline font-mono text-xs transition-editorial">
+                        [Reset Selection]
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN GRID CANVAS -->
+        <main class="overflow-x-auto">
+            <div class="min-w-[1280px]">
+
+                <!-- CHEVRON CONNECTOR (THE ONLY CONNECTOR IN THE DESIGN) -->
+                <div class="grid grid-cols-[160px_repeat(6,1fr)] gap-0 items-center mb-4">
+                    <div class="text-[11px] font-mono text-slate-400 uppercase tracking-wider pr-4">
+                        FLOW DIRECTION
+                    </div>
+                    <div class="col-span-6 bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-sm flex items-center justify-between relative">
+                        <div class="absolute inset-x-8 top-1/2 h-[1px] bg-slate-300 -translate-y-1/2 z-0"></div>
+
+                        <!-- Progress Nodes -->
+                        <div class="z-10 bg-white border border-navy text-navy font-mono text-xs font-bold w-6 h-6 flex items-center justify-center rounded-sm">01</div>
+                        <span class="z-10 text-navy font-bold text-sm bg-slate-50 px-2">›</span>
+                        <div class="z-10 bg-white border border-navy text-navy font-mono text-xs font-bold w-6 h-6 flex items-center justify-center rounded-sm">02</div>
+                        <span class="z-10 text-navy font-bold text-sm bg-slate-50 px-2">›</span>
+                        <div class="z-10 bg-white border border-slate-300 text-slate-500 font-mono text-xs font-bold w-6 h-6 flex items-center justify-center rounded-sm">03</div>
+                        <span class="z-10 text-navy font-bold text-sm bg-slate-50 px-2">›</span>
+                        <div class="z-10 bg-navy text-white font-mono text-xs font-bold w-6 h-6 flex items-center justify-center rounded-sm">04</div>
+                        <span class="z-10 text-navy font-bold text-sm bg-slate-50 px-2">›</span>
+                        <div class="z-10 bg-white border border-navy text-navy font-mono text-xs font-bold w-6 h-6 flex items-center justify-center rounded-sm">05</div>
+                        <span class="z-10 text-navy font-bold text-sm bg-slate-50 px-2">›</span>
+                        <div class="z-10 bg-white border border-navy text-navy font-mono text-xs font-bold w-6 h-6 flex items-center justify-center rounded-sm">06</div>
+                    </div>
+                </div>
+
+                <!-- TABLE GRID CONTAINER -->
+                <div class="border border-slate-200 rounded-sm overflow-hidden bg-white">
+                    
+                    <!-- COLUMN HEADERS -->
+                    <div class="grid grid-cols-[160px_repeat(6,1fr)] bg-slate-50 border-b border-slate-200">
+                        <div class="p-3 text-[11px] font-mono font-semibold text-slate-400 uppercase tracking-wider flex items-center border-r border-slate-200">
+                            STAGES
+                        </div>
+
+                        <!-- Col 01 -->
+                        <div onclick="selectColumn(1)" id="head-col-1" class="head-col cursor-pointer p-3 border-r border-slate-200 hover:bg-slate-100 transition-editorial">
+                            <div class="font-bold text-navy text-sm">01 Rep dashboard</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">Initial search entry</div>
+                        </div>
+
+                        <!-- Col 02 -->
+                        <div onclick="selectColumn(2)" id="head-col-2" class="head-col cursor-pointer p-3 border-r border-slate-200 hover:bg-slate-100 transition-editorial">
+                            <div class="font-bold text-navy text-sm">02 Flow A: new advertiser</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">Direct wizard creation</div>
+                        </div>
+
+                        <!-- Col 03 -->
+                        <div onclick="selectColumn(3)" id="head-col-3" class="head-col cursor-pointer p-3 border-r border-slate-200 hover:bg-slate-100 transition-editorial">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-navy text-sm">03 Flow B: new agency</span>
+                                <span class="text-[10px] font-mono uppercase bg-slate-200 text-slate-700 px-1 py-0.5 rounded-sm">Optional</span>
+                            </div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">Inline agency setup</div>
+                        </div>
+
+                        <!-- Col 04 (Handoff Step Tinted) -->
+                        <div onclick="selectColumn(4)" id="head-col-4" class="head-col cursor-pointer p-3 border-r border-slate-200 bg-navy-light/60 hover:bg-navy-light transition-editorial">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-navy text-sm">04 Governance queue</span>
+                                <span class="text-[10px] font-mono font-bold uppercase bg-navy text-white px-1 py-0.5 rounded-sm">Handoff</span>
+                            </div>
+                            <div class="text-[11px] text-indigo-900 font-medium mt-0.5">Policy & Dupe check</div>
+                        </div>
+
+                        <!-- Col 05 -->
+                        <div onclick="selectColumn(5)" id="head-col-5" class="head-col cursor-pointer p-3 border-r border-slate-200 hover:bg-slate-100 transition-editorial">
+                            <div class="font-bold text-navy text-sm">05 Advertiser record</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">Central data hub</div>
+                        </div>
+
+                        <!-- Col 06 -->
+                        <div onclick="selectColumn(6)" id="head-col-6" class="head-col cursor-pointer p-3 hover:bg-slate-100 transition-editorial">
+                            <div class="font-bold text-navy text-sm">06 Credit application</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">Finance unlock ($50k+)</div>
+                        </div>
+                    </div>
+
+                    <!-- GRID MATRIX ROWS -->
+                    
+                    <!-- ROW 1: ACTOR -->
+                    <div class="grid-row grid grid-cols-[160px_repeat(6,1fr)] border-b border-slate-200 text-xs" data-row-type="actor">
+                        <div class="p-3 font-mono font-semibold text-[11px] text-slate-400 uppercase tracking-wider bg-slate-50/50 border-r border-slate-200 flex items-center">
+                            ACTOR
+                        </div>
+                        <div class="col-cell cell-1 p-3 border-r border-slate-200 transition-editorial">
+                            <span class="inline-block bg-slate-100 text-slate-800 text-[11px] font-medium px-2 py-0.5 border border-slate-300 rounded-sm">Sales rep</span>
+                        </div>
+                        <div class="col-cell cell-2 p-3 border-r border-slate-200 transition-editorial">
+                            <span class="inline-block bg-slate-100 text-slate-800 text-[11px] font-medium px-2 py-0.5 border border-slate-300 rounded-sm">Sales rep</span>
+                        </div>
+                        <div class="col-cell cell-3 p-3 border-r border-slate-200 transition-editorial">
+                            <span class="inline-block bg-slate-100 text-slate-800 text-[11px] font-medium px-2 py-0.5 border border-slate-300 rounded-sm">Sales rep</span>
+                        </div>
+                        <div class="col-cell cell-4 p-3 border-r border-slate-200 bg-navy-light/30 transition-editorial">
+                            <span class="inline-block bg-navy text-white text-[11px] font-medium px-2 py-0.5 rounded-sm">Governance reviewer</span>
+                        </div>
+                        <div class="col-cell cell-5 p-3 border-r border-slate-200 transition-editorial">
+                            <span class="inline-block bg-slate-100 text-slate-800 text-[11px] font-medium px-2 py-0.5 border border-slate-300 rounded-sm">Sales rep</span>
+                        </div>
+                        <div class="col-cell cell-6 p-3 transition-editorial">
+                            <span class="inline-block bg-slate-100 text-slate-800 text-[11px] font-medium px-2 py-0.5 border border-slate-300 rounded-sm">Rep → Finance</span>
+                        </div>
+                    </div>
+
+                    <!-- ROW 2: USER GOAL -->
+                    <div class="grid-row grid grid-cols-[160px_repeat(6,1fr)] border-b border-slate-200 text-xs" data-row-type="goal">
+                        <div class="p-3 font-mono font-semibold text-[11px] text-slate-400 uppercase tracking-wider bg-slate-50/50 border-r border-slate-200 flex items-center">
+                            USER GOAL
+                        </div>
+                        <div class="col-cell cell-1 p-3 border-r border-slate-200 font-medium text-slate-800 transition-editorial">Add a missing client</div>
+                        <div class="col-cell cell-2 p-3 border-r border-slate-200 font-medium text-slate-800 transition-editorial">Submit accurate details</div>
+                        <div class="col-cell cell-3 p-3 border-r border-slate-200 font-medium text-slate-800 transition-editorial">Add a missing agency</div>
+                        <div class="col-cell cell-4 p-3 border-r border-slate-200 bg-navy-light/30 font-medium text-slate-800 transition-editorial">Catch duplicates + policy issues</div>
+                        <div class="col-cell cell-5 p-3 border-r border-slate-200 font-medium text-slate-800 transition-editorial">Track status + next steps</div>
+                        <div class="col-cell cell-6 p-3 font-medium text-slate-800 transition-editorial">Unlock spend over $50k</div>
+                    </div>
+
+                    <!-- ROW 3: KEY ACTION -->
+                    <div class="grid-row grid grid-cols-[160px_repeat(6,1fr)] border-b border-slate-200 text-xs" data-row-type="action">
+                        <div class="p-3 font-mono font-semibold text-[11px] text-slate-400 uppercase tracking-wider bg-slate-50/50 border-r border-slate-200 flex items-center">
+                            KEY ACTION
+                        </div>
+                        <div class="col-cell cell-1 p-3 border-r border-slate-200 text-slate-600 transition-editorial">Search, find no match</div>
+                        <div class="col-cell cell-2 p-3 border-r border-slate-200 text-slate-600 transition-editorial">3-step wizard</div>
+                        <div class="col-cell cell-3 p-3 border-r border-slate-200 text-slate-600 transition-editorial">Create agency inline</div>
+                        <div class="col-cell cell-4 p-3 border-r border-slate-200 bg-navy-light/30 text-slate-600 transition-editorial">Approve, reject, request info</div>
+                        <div class="col-cell cell-5 p-3 border-r border-slate-200 text-slate-600 transition-editorial">Complete checklist</div>
+                        <div class="col-cell cell-6 p-3 text-slate-600 transition-editorial">Submit spend + contact</div>
+                    </div>
+
+                    <!-- ROW 4: DATA CREATED -->
+                    <div class="grid-row grid grid-cols-[160px_repeat(6,1fr)] border-b border-slate-200 text-xs" data-row-type="data">
+                        <div class="p-3 font-mono font-semibold text-[11px] text-slate-400 uppercase tracking-wider bg-slate-50/50 border-r border-slate-200 flex items-center">
+                            DATA CREATED
+                        </div>
+                        <div class="col-cell cell-1 p-3 border-r border-slate-200 transition-editorial">
+                            <span class="font-mono text-[11px] text-slate-600 bg-slate-100 px-2 py-1 border border-slate-200 rounded-sm inline-block">search query</span>
+                        </div>
+                        <div class="col-cell cell-2 p-3 border-r border-slate-200 transition-editorial">
+                            <span class="font-mono text-[11px] text-slate-600 bg-slate-100 px-2 py-1 border border-slate-200 rounded-sm inline-block">submission · pending</span>
+                        </div>
+                        <div class="col-cell cell-3 p-3 border-r border-slate-200 transition-editorial">
+                            <span class="font-mono text-[11px] text-slate-600 bg-slate-100 px-2 py-1 border border-slate-200 rounded-sm inline-block">agency record</span>
+                        </div>
+                        <div class="col-cell cell-4 p-3 border-r border-slate-200 bg-navy-light/30 transition-editorial">
+                            <span class="font-mono text-[11px] text-indigo-900 bg-indigo-50 px-2 py-1 border border-indigo-200 rounded-sm inline-block">status · reviewer · notes</span>
+                        </div>
+                        <div class="col-cell cell-5 p-3 border-r border-slate-200 transition-editorial">
+                            <span class="font-mono text-[11px] text-slate-600 bg-slate-100 px-2 py-1 border border-slate-200 rounded-sm inline-block">advertiser · active</span>
+                        </div>
+                        <div class="col-cell cell-6 p-3 transition-editorial">
+                            <span class="font-mono text-[11px] text-slate-600 bg-slate-100 px-2 py-1 border border-slate-200 rounded-sm inline-block">credit case → Salesforce</span>
+                        </div>
+                    </div>
+
+                    <!-- ROW 5: PAIN POINT -->
+                    <div class="grid-row grid grid-cols-[160px_repeat(6,1fr)] border-b border-slate-200 text-xs" data-row-type="pain">
+                        <div class="p-3 font-mono font-semibold text-[11px] text-slate-400 uppercase tracking-wider bg-slate-50/50 border-r border-slate-200 flex items-center">
+                            PAIN POINT
+                        </div>
+                        <div class="col-cell cell-1 pain-cell p-3 border-r border-slate-200 text-pain-red font-medium transition-editorial">
+                            Client data differs across CRM, OMS, traffic
+                        </div>
+                        <div class="col-cell cell-2 pain-cell p-3 border-r border-slate-200 text-pain-red font-medium transition-editorial">
+                            Duplicates slip in
+                        </div>
+                        <div class="col-cell cell-3 pain-cell p-3 border-r border-slate-200 text-pain-red font-medium transition-editorial">
+                            Agency data siloed per system
+                        </div>
+                        <div class="col-cell cell-4 pain-cell p-3 border-r border-slate-200 bg-navy-light/30 text-pain-red font-medium transition-editorial">
+                            No governance workflow in tool
+                        </div>
+                        <div class="col-cell cell-5 pain-cell p-3 border-r border-slate-200 text-pain-red font-medium transition-editorial">
+                            No single source of truth
+                        </div>
+                        <div class="col-cell cell-6 pain-cell p-3 text-pain-red font-medium transition-editorial">
+                            Triggered above threshold
+                        </div>
+                    </div>
+
+                    <!-- ROW 6: DESIGN DECISION -->
+                    <div class="grid-row grid grid-cols-[160px_repeat(6,1fr)] text-xs" data-row-type="decision">
+                        <div class="p-3 font-mono font-semibold text-[11px] text-slate-400 uppercase tracking-wider bg-slate-50/50 border-r border-slate-200 flex items-center">
+                            DESIGN DECISION
+                        </div>
+                        <div class="col-cell cell-1 p-3 border-r border-slate-200 text-navy font-semibold bg-slate-50/40 transition-editorial">Search-first entry</div>
+                        <div class="col-cell cell-2 p-3 border-r border-slate-200 text-navy font-semibold bg-slate-50/40 transition-editorial">Progressive disclosure</div>
+                        <div class="col-cell cell-3 p-3 border-r border-slate-200 text-navy font-semibold bg-slate-50/40 transition-editorial">Branch only when needed</div>
+                        <div class="col-cell cell-4 p-3 border-r border-slate-200 text-navy font-semibold bg-navy-light/50 transition-editorial">Scoped to dupes + policy</div>
+                        <div class="col-cell cell-5 p-3 border-r border-slate-200 text-navy font-semibold bg-slate-50/40 transition-editorial">Record is the hub</div>
+                        <div class="col-cell cell-6 p-3 text-navy font-semibold bg-slate-50/40 transition-editorial">Triggered above threshold</div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+
+        <!-- FOOTER OUTCOMES (Editorial Summary Box) -->
+        <footer class="mt-8 pt-6 border-t border-slate-200">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="font-mono text-[11px] font-semibold text-slate-400 uppercase tracking-wider min-w-[160px]">
+                    TARGET OUTCOMES
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 flex-1">
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-sm flex items-center gap-3">
+                        <div class="w-1.5 h-1.5 bg-emerald-600 rounded-full flex-shrink-0"></div>
+                        <span class="text-xs font-semibold text-slate-800">1 source of truth for client data</span>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-sm flex items-center gap-3">
+                        <div class="w-1.5 h-1.5 bg-emerald-600 rounded-full flex-shrink-0"></div>
+                        <span class="text-xs font-semibold text-slate-800">Duplicates caught before record creation</span>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-sm flex items-center gap-3">
+                        <div class="w-1.5 h-1.5 bg-emerald-600 rounded-full flex-shrink-0"></div>
+                        <span class="text-xs font-semibold text-slate-800">Status visible to rep at every step</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        let currentSelectedCol = null;
+
+        // Select and Highlight a Column
+        function selectColumn(colIndex) {
+            if (currentSelectedCol === colIndex) {
+                resetSelection();
+                return;
+            }
+
+            currentSelectedCol = colIndex;
+
+            // Highlight column headers
+            document.querySelectorAll('.head-col').forEach((el, idx) => {
+                const cNum = idx + 1;
+                if (cNum === colIndex) {
+                    el.classList.add('bg-navy', 'text-white');
+                    el.classList.remove('hover:bg-slate-100', 'bg-navy-light/60');
+                    el.querySelectorAll('div, span').forEach(child => child.classList.add('!text-white'));
+                } else {
+                    el.classList.remove('bg-navy', 'text-white');
+                    el.querySelectorAll('div, span').forEach(child => child.classList.remove('!text-white'));
+                    if (cNum === 4) {
+                        el.classList.add('bg-navy-light/60');
+                    }
+                }
+            });
+
+            // Dim/Focus cells
+            document.querySelectorAll('.col-cell').forEach(cell => {
+                if (cell.classList.contains(`cell-${colIndex}`)) {
+                    cell.classList.remove('col-dimmed');
+                    cell.classList.add('bg-amber-50/20');
+                } else {
+                    cell.classList.add('col-dimmed');
+                    cell.classList.remove('bg-amber-50/20');
+                }
+            });
+        }
+
+        // Reset All Column Selections
+        function resetSelection() {
+            currentSelectedCol = null;
+
+            document.querySelectorAll('.head-col').forEach((el, idx) => {
+                const cNum = idx + 1;
+                el.classList.remove('bg-navy', 'text-white');
+                el.querySelectorAll('div, span').forEach(child => child.classList.remove('!text-white'));
+                if (cNum === 4) {
+                    el.classList.add('bg-navy-light/60');
+                }
+            });
+
+            document.querySelectorAll('.col-cell').forEach(cell => {
+                cell.classList.remove('col-dimmed', 'bg-amber-50/20');
+            });
+        }
+
+        // Row Filtering Function
+        function filterRows(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-700');
+            });
+
+            const activeBtn = document.getElementById(`btn-${type}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-white', 'text-slate-700');
+                activeBtn.classList.add('bg-slate-900', 'text-white');
+            }
+
+            document.querySelectorAll('.grid-row').forEach(row => {
+                const rType = row.getAttribute('data-row-type');
+                if (type === 'all') {
+                    row.style.display = 'grid';
+                } else if (type === 'pain') {
+                    row.style.display = (rType === 'pain' || rType === 'goal') ? 'grid' : 'none';
+                } else if (type === 'decision') {
+                    row.style.display = (rType === 'decision' || rType === 'action') ? 'grid' : 'none';
+                }
+            });
+        }
+
+        // Toggle Pain Point Visual Accent
+        function togglePainEmphasis() {
+            const isChecked = document.getElementById('chk-pain').checked;
+            document.querySelectorAll('.pain-cell').forEach(cell => {
+                if (isChecked) {
+                    cell.classList.add('bg-red-100/60', 'font-bold', 'border-l-2', 'border-l-pain-red');
+                } else {
+                    cell.classList.remove('bg-red-100/60', 'font-bold', 'border-l-2', 'border-l-pain-red');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
